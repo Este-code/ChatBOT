@@ -1,8 +1,11 @@
 from fastapi import FastAPI, UploadFile, File, status, HTTPException
-import uvicorn
 import library as lbr
 
 app = FastAPI()
+
+@app.get("/")
+async def root():
+    return {"Greetings" : "Welcome to chatBot for general purposes."}
 
 @app.post("/upload/", status_code=status.HTTP_200_OK)
 async def upload(file : UploadFile = File()):
@@ -20,4 +23,3 @@ async def question_and_answer(question : str):
         return {"question": question, "answer": answer}
     except Exception as e:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e)) 
-

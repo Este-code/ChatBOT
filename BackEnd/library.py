@@ -1,8 +1,8 @@
 import re
-from langchain.document_loaders import PyPDFLoader
+from langchain_community.document_loaders import PyPDFLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 import settings as sts
-from langchain.vectorstores import Chroma
+from langchain_community.vectorstores import Chroma
 
 def retrieve_answer_using_base_prompt(question):
     result = sts.qa({"query":question})

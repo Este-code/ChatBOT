@@ -6,3 +6,5 @@ python-dotenv
 pypdf
 chromadb
 requests
+python-multipart
+langchain-openai
