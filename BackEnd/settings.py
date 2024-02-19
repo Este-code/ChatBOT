@@ -4,19 +4,19 @@ import os
 from dotenv import load_dotenv, find_dotenv
 from langchain.retrievers import ContextualCompressionRetriever
 from langchain.retrievers.document_compressors import LLMChainExtractor
-from langchain_community.vectorstores import Chroma
-from langchain_community.llms import OpenAI
+from langchain_community.vectorstores.chroma import Chroma
 from langchain_openai import ChatOpenAI
 from langchain.chains import RetrievalQA
 from langchain.prompts import PromptTemplate
 from langchain.memory import ConversationBufferMemory
 from langchain.chains import ConversationalRetrievalChain
 
-_ = load_dotenv(find_dotenv()) # reads local .env file
+persist_directory = "./chroma"
+
+
+load_dotenv(find_dotenv()) # reads local .env file
 
 embedding = OpenAIEmbeddings()
-
-persist_directory = "./Backend/chroma"
 
 openai.api_key = os.environ['OPENAI_API_KEY']
 
@@ -25,6 +25,7 @@ llm = ChatOpenAI(model_name="gpt-3.5-turbo", temperature = 0)
 compressor = LLMChainExtractor.from_llm(llm)
 
 vectordb = Chroma(
+    collection_name="chatbot",
     persist_directory=persist_directory,
     embedding_function=embedding
 )

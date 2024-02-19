@@ -1,36 +1,37 @@
 import re
-from langchain_community.document_loaders import PyPDFLoader
+from langchain_community.document_loaders import PyPDFLoader,PDFMinerPDFasHTMLLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain_community.vectorstores.chroma import Chroma
 import settings as sts
-from langchain_community.vectorstores import Chroma
+
 
 def retrieve_answer_using_base_prompt(question):
-    result = sts.qa({"query":question})
-    #result["source_documents"][0]
+    result = sts.qa.invoke({"query":question})
     return result["result"]
 
 def retrieve_answer(question):
     compressed_docs = sts.compressor_retreiver.get_relevant_documents(question)
     return compressed_docs
 
-def store_document(text):
-    splitted_document = split_pdf_document(text)
+def store_document(file):
+    splitted_document = split_pdf_document(file)
     vectordb = Chroma.from_documents(
+        collection_name="chatbot",
         documents = splitted_document,
         embedding = sts.embedding,
         persist_directory = sts.persist_directory
     )
     vectordb.persist()
 
-def split_pdf_document(text):
-    #loader = PyPDFLoader(file) # loading the pdf document
-    chunk_size_, chunk_overlap_ = initialize_chunk_parameters(text)
+def split_pdf_document(file):
+    chunk_size_, chunk_overlap_ = initialize_chunk_parameters(file)
     r_splitter = RecursiveCharacterTextSplitter(
         chunk_size=chunk_size_,
         chunk_overlap=chunk_overlap_,
         separators=["\n\n", "\n", "(?<=\. )", " ", ""]
     )
-    splits = r_splitter.split_documents(text)
+    loader = PyPDFLoader(file) # loading the pdf document
+    splits = r_splitter.split_documents(loader.load())
     return splits
 
 def calculate_average_word_length(text):
@@ -42,7 +43,9 @@ def calculate_word_density(text):
     words = text.split()
     return len(words) / len(text)
 
-def initialize_chunk_parameters(text):
+def initialize_chunk_parameters(file):
+    loader = PDFMinerPDFasHTMLLoader(file)
+    text = loader.load()[0].page_content
     average_word_length = calculate_average_word_length(text)
     word_density = calculate_word_density(text)
 

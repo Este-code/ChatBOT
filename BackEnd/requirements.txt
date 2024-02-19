@@ -8,4 +8,5 @@ pypdf
 chromadb
 requests
 python-multipart
-langchain-openai
+langchain-openai 
+pdfminer.six

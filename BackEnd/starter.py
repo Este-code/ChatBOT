@@ -1,6 +1,7 @@
 # to be launched only once
 import chromadb
-from settings import persist_direcotry
 
-chroma_client = chromadb.PersistentClient(persist_direcotry)
+persist_directory = "./chroma"
+
+chroma_client = chromadb.PersistentClient(persist_directory)
 collection = chroma_client.get_or_create_collection(name="chatbot")
