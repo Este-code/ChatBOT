@@ -3,6 +3,16 @@
 {% block content %}
 <h1>Test</h1>
 <a href="{{ url_for('test') }}">
-  clicca qui
+  Carica documento
 </a>
+<div class="container">
+  <form action="/qa" method="post">
+    <div class="input-group">
+      <input type="text" name="question" class="form-control" placeholder="Q&A">
+      <button class="btn btn-outline-primary" type="submit">Chiedi</button>
+    </div>
+  </form>  
+</div>
+
+
 {% endblock %}

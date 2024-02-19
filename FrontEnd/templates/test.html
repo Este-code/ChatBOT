@@ -2,5 +2,10 @@
 {% block title %}Home Page 2{% endblock %}
 {% block content %}
 <h1>Test2</h1>
-{{value}}
+{{data.Greetings}}
+<h2>Upload a PDF File</h2>
+<form action="/upload" method="post" enctype="multipart/form-data">
+    <input type="file" name="pdf_file" accept=".pdf">
+    <input type="submit" value="Upload">
+</form>
 {% endblock %}
