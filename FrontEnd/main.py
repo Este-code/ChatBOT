@@ -1,7 +1,10 @@
-from flask import Flask, render_template, jsonify, send_from_directory, request
+from flask import Flask,flash, render_template, jsonify, send_from_directory, request
+from flask_toastr import Toastr
 import requests
+import json
 
-app = Flask(__name__, static_url_path='/static')
+app = Flask(__name__)
+toastr = Toastr(app)
 
 @app.route('/')
 def home():
@@ -24,7 +27,7 @@ def test():
     else:
         return jsonify({'error': 'Failed to fetch data from API'}), response.status_code
 
-@app.route('/upload', methods=['POST'])
+@app.route('/', methods=['POST'])
 def upload_file():
     #Check if the POST request has the file
     if 'pdf_file' not in request.files:
@@ -40,7 +43,12 @@ def upload_file():
     files = {'file': (file.filename, file.stream, file.mimetype)}
     response = requests.post(api_url, files=files)
 
-    return response.text, response.status_code
+    if(response.status_code == 200):
+        flash(response.text, "success")
+        return render_template('index.html')
+    else:
+        flash(response.text, "error")
+        return render_template('index.html')
 
 @app.route('/qa', methods=['POST'])
 def submit():
@@ -48,5 +56,8 @@ def submit():
     response = requests.post('http://localhost:32773/qa/', json={'question': text_input})
     return response.text
 
+
 if __name__ == '__main__':
+    app.secret_key = 'super secret key'#NEEDS TO CHANGE!!!
+    app.config['SESSION_TYPE'] = 'filesystem'
     app.run(debug=True)
