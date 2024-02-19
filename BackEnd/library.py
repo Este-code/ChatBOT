@@ -13,8 +13,8 @@ def retrieve_answer(question):
     compressed_docs = sts.compressor_retreiver.get_relevant_documents(question)
     return compressed_docs
 
-def store_document(file):
-    splitted_document = split_pdf_document(file)
+def store_document(text):
+    splitted_document = split_pdf_document(text)
     vectordb = Chroma.from_documents(
         documents = splitted_document,
         embedding = sts.embedding,
@@ -22,15 +22,15 @@ def store_document(file):
     )
     vectordb.persist()
 
-def split_pdf_document(file):
-    loader = PyPDFLoader(file) # loading the pdf document
-    chunk_size_, chunk_overlap_ = initialize_chunk_parameters(loader.load().page_content)
+def split_pdf_document(text):
+    #loader = PyPDFLoader(file) # loading the pdf document
+    chunk_size_, chunk_overlap_ = initialize_chunk_parameters(text)
     r_splitter = RecursiveCharacterTextSplitter(
         chunk_size=chunk_size_,
         chunk_overlap=chunk_overlap_,
         separators=["\n\n", "\n", "(?<=\. )", " ", ""]
     )
-    splits = r_splitter.split_documents(loader.load())
+    splits = r_splitter.split_documents(text)
     return splits
 
 def calculate_average_word_length(text):

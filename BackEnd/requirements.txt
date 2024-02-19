@@ -3,6 +3,7 @@ uvicorn[standard]
 langchain
 openai
 python-dotenv
+PyPDF2
 pypdf
 chromadb
 requests
