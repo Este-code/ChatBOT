@@ -1,7 +1,8 @@
 import re
 from langchain_community.document_loaders import PyPDFLoader,PDFMinerPDFasHTMLLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain_community.vectorstores.chroma import Chroma
+#from langchain_community.vectorstores.chroma import Chroma
+#from langchain_community.vectorstores.lancedb import LanceDB
 import settings as sts
 
 
@@ -15,6 +16,7 @@ def retrieve_answer(question):
 
 def store_document(file):
     splitted_document = split_pdf_document(file)
+    '''
     vectordb = Chroma.from_documents(
         collection_name="chatbot",
         documents = splitted_document,
@@ -22,6 +24,10 @@ def store_document(file):
         persist_directory = sts.persist_directory
     )
     vectordb.persist()
+    '''
+    sts.vectordb.add_documents(
+        documents = splitted_document
+    )
 
 def split_pdf_document(file):
     chunk_size_, chunk_overlap_ = initialize_chunk_parameters(file)

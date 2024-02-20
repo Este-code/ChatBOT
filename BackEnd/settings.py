@@ -4,7 +4,8 @@ import os
 from dotenv import load_dotenv, find_dotenv
 from langchain.retrievers import ContextualCompressionRetriever
 from langchain.retrievers.document_compressors import LLMChainExtractor
-from langchain_community.vectorstores.chroma import Chroma
+#from langchain_community.vectorstores.chroma import Chroma
+from langchain_community.vectorstores.lancedb import LanceDB
 from langchain_openai import ChatOpenAI
 from langchain.chains import RetrievalQA
 from langchain.prompts import PromptTemplate
@@ -24,10 +25,15 @@ llm = ChatOpenAI(model_name="gpt-3.5-turbo", temperature = 0)
 
 compressor = LLMChainExtractor.from_llm(llm)
 
+'''
 vectordb = Chroma(
     collection_name="chatbot",
     persist_directory=persist_directory,
     embedding_function=embedding
+)
+'''
+vectordb = LanceDB(
+    embedding=embedding
 )
 
 compressor_retreiver = ContextualCompressionRetriever(
