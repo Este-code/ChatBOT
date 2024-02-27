@@ -1,0 +1,3 @@
+{
+    "dati_connessione": "postgresql+psycopg2://u3ai_ro:40eeBFcA@172.31.11.10:5432/staging"
+}

@@ -1,7 +1,8 @@
 from fastapi import FastAPI, UploadFile, File, status, HTTPException
-import library as lbr
 import tempfile
-from question import QuestionInput
+import library.functions as fn
+from models.question import QuestionInput
+import library.settings
 
 app = FastAPI()
 
@@ -21,7 +22,7 @@ async def upload(file : UploadFile = File(...)):
         with tempfile.NamedTemporaryFile(suffix=".pdf", delete=False) as temp_file:
             temp_file.write(await file.read())
             pdf_path = temp_file.name
-            lbr.store_document(pdf_path)
+            fn.store_document(pdf_path)
 
         return {"message": "File uploaded successfully"}
     
@@ -31,7 +32,7 @@ async def upload(file : UploadFile = File(...)):
 @app.post("/qa/", status_code=status.HTTP_200_OK)
 async def question_and_answer(question : QuestionInput):
     try:
-        answer = lbr.retrieve_answer_using_base_prompt(question.question)
-        return {"question": question, "answer": answer}
+        answer = fn.retrieve_answer_using_base_prompt(question.question)
+        return {"question": question.question, "answer": answer}
     except Exception as e:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e)) 

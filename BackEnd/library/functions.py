@@ -3,12 +3,12 @@ from langchain_community.document_loaders import PyPDFLoader,PDFMinerPDFasHTMLLo
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 #from langchain_community.vectorstores.chroma import Chroma
 #from langchain_community.vectorstores.lancedb import LanceDB
-import settings as sts
+import library.settings as sts
 
 
 def retrieve_answer_using_base_prompt(question):
     result = sts.qa.invoke({"query":question})
-    return result["result"]
+    return result
 
 def retrieve_answer(question):
     compressed_docs = sts.compressor_retreiver.get_relevant_documents(question)

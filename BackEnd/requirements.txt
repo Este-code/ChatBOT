@@ -11,3 +11,6 @@ python-multipart
 langchain-openai 
 pdfminer.six
 lancedb
+sqlalchemy
+psycopg2-binary
+jq
