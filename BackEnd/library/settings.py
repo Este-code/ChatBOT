@@ -82,7 +82,11 @@ template = """
     generando solamente una query SQL per un database PostgreSQL,
     basandoti sulla DDL fornita qui di seguito e il contesto in input.
     Utilizza solamente SELECT statements. Non utilizzare commenti.
-    Prova sempre a dare una risposta, se proprio non puoi dare una risposta: rispondi N/A \n {question}{context} \n"""+f"{ddl}"
+    Qui ha inizio la DDL \n"""+f"{ddl}"+"""\n Qui ha fine la DDL
+    Prova sempre a dare una risposta, se proprio non puoi dare una risposta: rispondi N/A
+    {context}
+    Question: {question}
+    Helpful Answer:"""
 
 QA_CHAIN_PROMPT = PromptTemplate.from_template(template)
 
@@ -90,7 +94,7 @@ QA_CHAIN_PROMPT = PromptTemplate.from_template(template)
 qa = RetrievalQA.from_chain_type(
     llm,
     retriever=vectordb.as_retriever(),
-    return_source_documents=True,
+    return_source_documents=False,
     chain_type_kwargs={ "prompt": QA_CHAIN_PROMPT}
 )
 

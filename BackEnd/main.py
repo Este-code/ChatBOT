@@ -33,6 +33,6 @@ async def upload(file : UploadFile = File(...)):
 async def question_and_answer(question : QuestionInput):
     try:
         answer = fn.retrieve_answer_using_base_prompt(question.question)
-        return {"question": question.question, "answer": answer}
+        return {"question": question.question, "answer": answer["result"]}
     except Exception as e:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e)) 
