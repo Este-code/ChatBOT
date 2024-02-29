@@ -52,9 +52,27 @@ def upload_file():
 
 @app.route('/qa', methods=['POST'])
 def submit():
-    text_input = request.form['question']
-    response = requests.post('http://localhost:32773/qa/', json={'question': text_input})
-    return response.text
+    try:
+        # Extract the question data from the request body
+        question_data = request.json
+        # Access the value of the "question" key from the JSON data
+        text_input = question_data.get('question')
+        response = requests.post('http://localhost:32773/qa/', json={'question': text_input})
+
+        data = response.json()
+        # Access the value of the "question" and "answer" keys from the JSON data
+        question = data.get('question')
+        answer = data.get('answer')
+
+        # Return the question and answer in the response
+        response_data = {
+            'question': question,
+            'answer': answer
+        }
+        return jsonify(response_data)
+    except Exception as e:
+        print("An error occurred:", str(e))
+        return jsonify({'error': 'Internal Server Error'}), 500
 
 
 if __name__ == '__main__':

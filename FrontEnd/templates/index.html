@@ -6,12 +6,51 @@
   Carica documento
 </a>
 <div class="container">
-  <form action="/qa" method="post">
+  <form id="questionForm">
     <div class="input-group">
-      <input type="text" name="question" class="form-control" placeholder="Q&A">
+      <input type="text" name="question" id="question" class="form-control" placeholder="Q&A">
       <button class="btn btn-outline-primary" type="submit">Chiedi</button>
     </div>
-  </form>  
+  </form>
+  <div id="apiResponse"></div>
+    
+  <script>
+     document.getElementById('questionForm').addEventListener('submit', function(event) {
+            // Prevent the default form submission behavior
+            event.preventDefault();
+            
+            // Get the value of the question input field
+            var question = document.getElementById('question').value;
+
+            // Make the fetch request with the POST method and the question data
+            fetch('/qa', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    question: question
+                })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to submit question: ' + response.statusText);
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Process the response data
+                console.log(data);
+                document.getElementById('apiResponse').innerHTML = data.answer;
+            })
+            .catch(error => {
+                console.error('Error submitting question:', error);
+                // Display an error message to the user
+            });
+        });
+             
+
+  </script> 
 
 </div>
 
