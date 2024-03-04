@@ -1,22 +1,22 @@
 [
     {
-        "question":"Dammi il range temporale solamente per il sensore 2 e aggiungi commenti",
+        "metadata":"Dammi il range temporale solamente per il sensore 2 e aggiungi commenti",
         "sql":"SELECT\\ min(pkt_time) AS range_temporale_minimo, -- Minimum timestamp for the given sensor\\  max(pkt_time) AS range_temporale_massimo, -- Maximum timestamp for the given sensor\\ id_topic AS sensori                    -- Sensor ID\\ FROM\\  measurement\\ WHERE\\ id_topic = 2                            -- Filter for sensor with id_topic 2\\ GROUP BY\\ id_topic;                            -- Group by sensor ID"
     },
     {
-        "question":"Mostrami tutti gli alert per il sensore 1",
+        "metadata":"Mostrami tutti gli alert per il sensore 1",
         "sql":"SELECT\\ a.trigger_time,\\ a.ae_value\\ FROM\\ alert a\\ JOIN\\ sensor s ON a.id_topic = s.id\\ WHERE\\ s.id = 1"
     },
     {
-        "question":"Per il sensore 5 mostrami su un time bucket di 15 minuti la media, la minima e la massima del valore ae",
+        "metadata":"Per il sensore 5 mostrami su un time bucket di 15 minuti la media, la minima e la massima del valore ae",
         "sql":"SELECT\\ time_bucket('15 minute', pkt_time) as bucket,\\ id_topic,\\ avg(ae_value) as avg,\\ max(ae_value) as max,\\ min(ae_value) as min\\ FROM\\ measurement\\ where\\ id_topic = 5\\ GROUP BY bucket, id_topic\\ order by bucket;"
     },
     {
-        "question":"mostrami per il sensore 5 i primi 100 risultati in ordine temporale del valore ae",
+        "metadata":"mostrami per il sensore 5 i primi 100 risultati in ordine temporale del valore ae",
         "sql":"SELECT ae_value, pkt_time\\FROM measurement\\WHERE id_topic = 5\\ORDER BY pkt_time ASC\\ LIMIT 100;"
     },
     {
-        "question":"mostrami tutti i sensori",
+        "metadata":"mostrami tutti i sensori",
         "sql":"SELECT * FROM measurement"
     }
 ]
