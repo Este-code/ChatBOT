@@ -6,7 +6,5 @@ requests
 sqlalchemy
 psycopg2-binary
 sqlite3
-gensim
-nltk
 scikit-learn
 sentence-transformers
