@@ -57,7 +57,7 @@ def submit():
         question_data = request.json
         # Access the value of the "question" key from the JSON data
         text_input = question_data.get('question')
-        response = requests.post('http://localhost:32773/qa/', json={'question': text_input})
+        response = requests.post('http://127.0.0.1:8000/getsql/', json={'query': text_input})
 
         data = response.json()
         # Access the value of the "question" and "answer" keys from the JSON data
