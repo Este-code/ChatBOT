@@ -25,3 +25,9 @@ def delete_sql(ids):
     for i in ids:
         cursor.execute('DELETE FROM sql_queries WHERE id = '+i)
     conn.commit()
+
+def getAll_sql():
+    cursor.execute('''SELECT * FROM sql_queries''')
+    results = cursor.fetchall()
+
+    return results
