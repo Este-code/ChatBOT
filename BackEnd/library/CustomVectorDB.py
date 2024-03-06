@@ -18,7 +18,7 @@ class CustomVectorDB:
                 )''')
         self.conn.commit()
 
-    def retrieve_sql(self, input_sentence, threshold=0.8):
+    def retrieve_sql(self, input_sentence, threshold=0.9):
         input_vector = self.embedding.encode(input_sentence.lower())
         self.cursor.execute('''SELECT sql, metadata, vector FROM sql_queries''')
         results = self.cursor.fetchall()
@@ -27,7 +27,11 @@ class CustomVectorDB:
             stored_vector = json.loads(result[2])
             similarity = cosine_similarity([input_vector], [stored_vector])[0][0]
             if similarity > threshold:
-                relevant_results.append((result[0], result[1], similarity))
+                relevant_results.append([result[0], result[1], float(similarity)])
+        
+        if len(relevant_results)>1:
+            relevant_results = sorted(relevant_results,key=lambda x: x[2], reverse=True)
+
         return relevant_results
 
     def add_sql(self, data):
@@ -49,7 +53,7 @@ class CustomVectorDB:
         return results
 
     def get_sql(self,query):
-        self.cursor.execute("SELECT * FROM sql_queries WHERE metdata = "+query)
+        self.cursor.execute("SELECT * FROM sql_queries WHERE metadata = "+query)
         result = self.cursor.fetchall()
 
         return result
