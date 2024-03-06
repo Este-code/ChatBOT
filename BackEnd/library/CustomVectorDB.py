@@ -1,39 +1,55 @@
 from sklearn.metrics.pairwise import cosine_similarity
+from sentence_transformers import SentenceTransformer
 import json
-from library.settings import cursor, conn, embedding
+import sqlite3
 
-def retrieve_sql(input_sentence, threshold=0.8):
-    input_vector = embedding.encode(input_sentence.lower())
-    cursor.execute('''SELECT sql, metadata, vector FROM sql_queries''')
-    results = cursor.fetchall()
-    relevant_results = []
-    for result in results:
-        stored_vector = json.loads(result[2])
-        similarity = cosine_similarity([input_vector], [stored_vector])[0][0]
-        if similarity > threshold:
-            relevant_results.append((result[0], result[1], similarity))
-    return relevant_results
+class CustomVectorDB:
 
-def add_sql(data):
-    for i, doc in enumerate(data):
-        vector = embedding.encode(doc['metadata'].lower())
-        vector_list = [i for i in vector]
-        cursor.execute('''INSERT INTO sql_queries (sql, metadata, vector) VALUES (?, ?, ?)''', (doc['sql'], doc['metadata'], str(vector_list)))
-    conn.commit()
+    def __init__(self, path):
+        self.conn = sqlite3.connect(path+'/vector_db.sqlite')
+        self.cursor = self.conn.cursor()
+        self.embedding = SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')
 
-def delete_sql(ids):
-    for i in ids:
-        cursor.execute('DELETE FROM sql_queries WHERE id = '+i)
-    conn.commit()
+        self.cursor.execute('''CREATE TABLE IF NOT EXISTS sql_queries (
+                    id INTEGER PRIMARY KEY,
+                    sql TEXT,
+                    metadata TEXT,
+                    vector TEXT
+                )''')
+        self.conn.commit()
 
-def getAll_sql():
-    cursor.execute('''SELECT * FROM sql_queries''')
-    results = cursor.fetchall()
+    def retrieve_sql(self, input_sentence, threshold=0.8):
+        input_vector = self.embedding.encode(input_sentence.lower())
+        self.cursor.execute('''SELECT sql, metadata, vector FROM sql_queries''')
+        results = self.cursor.fetchall()
+        relevant_results = []
+        for result in results:
+            stored_vector = json.loads(result[2])
+            similarity = cosine_similarity([input_vector], [stored_vector])[0][0]
+            if similarity > threshold:
+                relevant_results.append((result[0], result[1], similarity))
+        return relevant_results
 
-    return results
+    def add_sql(self, data):
+        for i, doc in enumerate(data):
+            vector = self.embedding.encode(doc['metadata'].lower())
+            vector_list = [i for i in vector]
+            self.cursor.execute('''INSERT INTO sql_queries (sql, metadata, vector) VALUES (?, ?, ?)''', (doc['sql'], doc['metadata'], str(vector_list)))
+        self.conn.commit()
 
-def get_sql(query):
-    cursor.execute("SELECT * FROM sql_queries WHERE metdata = "+query)
-    result = cursor.fetchall()
+    def delete_sql(self,ids):
+        for i in ids:
+            self.cursor.execute('DELETE FROM sql_queries WHERE id = '+i)
+        self.conn.commit()
 
-    return result
+    def getAll_sql(self):
+        self.cursor.execute('''SELECT * FROM sql_queries''')
+        results = self.cursor.fetchall()
+
+        return results
+
+    def get_sql(self,query):
+        self.cursor.execute("SELECT * FROM sql_queries WHERE metdata = "+query)
+        result = self.cursor.fetchall()
+
+        return result

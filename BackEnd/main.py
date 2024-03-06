@@ -2,8 +2,8 @@ from fastapi import FastAPI, status, HTTPException
 import uvicorn
 import library.functions as fn
 from models.RetrieveSQL import RetrieveSQL
-from library.settings import cursor, conn, data, embedding
-import library.CustomVectorDB as vectordb
+import json
+from library.settings import vectordb
 
 app = FastAPI()
 
@@ -19,14 +19,9 @@ async def question_and_answer(query : RetrieveSQL):
 
 if __name__ == "__main__":
     
-    cursor.execute('''CREATE TABLE IF NOT EXISTS sql_queries (
-                    id INTEGER PRIMARY KEY,
-                    sql TEXT,
-                    metadata TEXT,
-                    vector TEXT
-                )''')
-    conn.commit()
-
+    #Test inserimento dati
+    #with open('config/training.json', encoding="utf-8")as file:
+    #    data = json.load(file)
     #vectordb.add_sql(data)
 
     uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True)

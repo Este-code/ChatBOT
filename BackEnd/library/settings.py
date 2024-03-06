@@ -2,13 +2,14 @@ from dotenv import load_dotenv, find_dotenv
 from sqlalchemy import create_engine
 from library.common import get_config_value
 from library.ddl import ddl
-import sqlite3
-import json
-from sentence_transformers import SentenceTransformer
+import library.CustomVectorDB as CVDB
 
 load_dotenv(find_dotenv()) # reads local .env file
 dati_connessione = get_config_value("dati_connessione")
 engine = create_engine(dati_connessione)
+
+path = "vectordb"
+vectordb = CVDB.CustomVectorDB(path)
 
 # Build prompt
 template = """
@@ -23,10 +24,3 @@ template = """
     Helpful Answer:
 """
 
-conn = sqlite3.connect('./vectordb/vector_db.sqlite')
-cursor = conn.cursor()
-
-with open('./config/training.json', encoding="utf-8")as file:
-    data = json.load(file)
-
-embedding = SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')

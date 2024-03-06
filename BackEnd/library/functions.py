@@ -1,4 +1,4 @@
-import library.CustomVectorDB as vectordb
+from library.settings import vectordb
 
 def retrieve_answer(question):
     return vectordb.retrieve_sql(question)
