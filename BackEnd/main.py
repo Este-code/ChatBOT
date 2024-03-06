@@ -3,6 +3,7 @@ import uvicorn
 import library.functions as fn
 from models.RetrieveSQL import RetrieveSQL
 from library.settings import cursor, conn, data, embedding
+import library.CustomVectorDB as vectordb
 
 app = FastAPI()
 
@@ -26,10 +27,6 @@ if __name__ == "__main__":
                 )''')
     conn.commit()
 
-    for i, doc in enumerate(data):
-        vector = embedding.encode(doc['metadata'].lower())
-        vector_list = [i for i in vector]
-        cursor.execute('''INSERT INTO sql_queries (sql, metadata, vector) VALUES (?, ?, ?)''', (doc['sql'], doc['metadata'], str(vector_list)))
-    conn.commit()
+    #vectordb.add_sql(data)
 
     uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True)

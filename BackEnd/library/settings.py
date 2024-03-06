@@ -26,7 +26,7 @@ template = """
 conn = sqlite3.connect('./vectordb/vector_db.sqlite')
 cursor = conn.cursor()
 
-with open('./config/training.json')as file:
+with open('./config/training.json', encoding="utf-8")as file:
     data = json.load(file)
 
 embedding = SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')

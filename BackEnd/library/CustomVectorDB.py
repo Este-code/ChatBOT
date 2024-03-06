@@ -31,3 +31,9 @@ def getAll_sql():
     results = cursor.fetchall()
 
     return results
+
+def get_sql(query):
+    cursor.execute("SELECT * FROM sql_queries WHERE metdata = "+query)
+    result = cursor.fetchall()
+
+    return result
