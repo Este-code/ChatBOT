@@ -8,7 +8,7 @@ load_dotenv(find_dotenv()) # reads local .env file
 dati_connessione = get_config_value("dati_connessione")
 engine = create_engine(dati_connessione)
 
-path = "vectordb"
+path = "vectordb/"
 vectordb = CVDB.CustomVectorDB(path)
 
 # Build prompt

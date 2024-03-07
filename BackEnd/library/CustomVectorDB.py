@@ -12,7 +12,7 @@ class CustomVectorDB:
     def __init__(self, path):
         if not os.path.exists(path):
             os.makedirs(path)
-        self.conn = sqlite3.connect(path + 'vector_db.sqlite')
+        self.conn = sqlite3.connect(path + 'vector_db.sqlite', check_same_thread=False)
         self.cursor = self.conn.cursor()
         self.embedding = SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')
 
@@ -39,7 +39,7 @@ class CustomVectorDB:
             if similarity > threshold:
                 relevant_results.append([result[0], result[1], result[2], similarity])
         
-        if len(relevant_results)>1:
+        if len(relevant_results)>=1:
             relevant_results = sorted(relevant_results,key=lambda x: x[3], reverse=True)
             return relevant_results[0]
         else:

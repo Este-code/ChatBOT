@@ -11,6 +11,7 @@ app = FastAPI()
 async def question_and_answer(query : RetrieveSQL):
     try:
         answer = fn.retrieve_answer(query.query)
+        print(answer)
         return {"question": query.query, "answer": answer}
     except Exception as e:
         print("ERROR: "+str(e))
@@ -20,8 +21,8 @@ async def question_and_answer(query : RetrieveSQL):
 if __name__ == "__main__":
     
     #Test inserimento dati
-    #with open('config/training.json', encoding="utf-8")as file:
-    #    data = json.load(file)
-    #vectordb.add_sql(data)
+    with open('config/training.json', encoding="utf-8")as file:
+        data = json.load(file)
+    vectordb.add_sql(data)
 
     uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True)
