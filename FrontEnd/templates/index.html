@@ -55,9 +55,6 @@
     document.getElementById('questionForm').addEventListener('submit', function(event) {
            // Prevent the default form submission behavior
            event.preventDefault();
-           
-           // Get the value of the question input field
-           var question = document.getElementById('question').value;
 
            // Make the fetch request with the POST method and the question data
            fetch('/getMemories', {
