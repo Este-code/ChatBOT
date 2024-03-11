@@ -3,6 +3,7 @@ from sqlalchemy import create_engine
 from library.common import get_config_value
 from library.ddl import ddl
 import library.CustomVectorDB as CVDB
+import library.ConversationBufferMemory as CBM
 
 load_dotenv(find_dotenv()) # reads local .env file
 dati_connessione = get_config_value("dati_connessione")
@@ -10,6 +11,7 @@ engine = create_engine(dati_connessione)
 
 path = "vectordb/"
 vectordb = CVDB.CustomVectorDB(path)
+bufferMemory = CBM.ConversationBufferMemory()
 
 # Build prompt
 template = """

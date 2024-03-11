@@ -4,6 +4,7 @@ import library.functions as fn
 from models.RetrieveSQL import RetrieveSQL
 import json
 from library.settings import vectordb
+from library.settings import bufferMemory
 
 app = FastAPI()
 
@@ -11,12 +12,19 @@ app = FastAPI()
 async def question_and_answer(query : RetrieveSQL):
     try:
         answer = fn.retrieve_answer(query.query)
-        print(answer)
         return {"question": query.query, "answer": answer}
     except Exception as e:
         print("ERROR: "+str(e))
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e)) 
     
+@app.post("/getMemories/", status_code=status.HTTP_200_OK)
+def getMemories():
+    try:
+        history = bufferMemory.get_memories()
+        return {"history" : history}
+    except Exception as e:
+        print("ERROR: "+str(e))
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e)) 
 
 if __name__ == "__main__":
     
