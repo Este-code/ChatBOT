@@ -74,6 +74,15 @@ def submit():
         print("An error occurred:", str(e))
         return jsonify({'error': 'Internal Server Error'}), 500
 
+@app.route('/getMemories', methods=['POST'])
+def memory():
+    try:
+        response = requests.post('http://127.0.0.1:8000/getMemories/')
+        return response.json()
+    except Exception as e:
+        print("An error occurred:", str(e))
+        return jsonify({'error': 'Internal Server Error'}), 500
+
 
 if __name__ == '__main__':
     app.secret_key = 'super secret key'#NEEDS TO CHANGE!!!

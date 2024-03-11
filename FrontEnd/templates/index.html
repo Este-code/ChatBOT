@@ -13,7 +13,6 @@
     </div>
   </form>
   <div id="apiResponse"></div>
-    
   <script>
      document.getElementById('questionForm').addEventListener('submit', function(event) {
             // Prevent the default form submission behavior
@@ -48,9 +47,42 @@
                 // Display an error message to the user
             });
         });
-             
-
   </script> 
+  <br><br><br>
+  <h3>History:</h3>
+  <div id="apiMemory"></div>
+  <script>
+    document.getElementById('questionForm').addEventListener('submit', function(event) {
+           // Prevent the default form submission behavior
+           event.preventDefault();
+           
+           // Get the value of the question input field
+           var question = document.getElementById('question').value;
+
+           // Make the fetch request with the POST method and the question data
+           fetch('/getMemories', {
+               method: 'POST',
+               headers: {
+                   'Content-Type': 'application/json'
+               }
+           })
+           .then(response => {
+               if (!response.ok) {
+                   throw new Error('Failed to submit question: ' + response.statusText);
+               }
+               return response.json();
+           })
+           .then(data => {
+               // Process the response data
+               console.log(data);
+               document.getElementById('apiMemory').innerHTML = data.history;
+           })
+           .catch(error => {
+               console.error('Error submitting question:', error);
+               // Display an error message to the user
+           });
+       });
+ </script> 
 
 </div>
 
