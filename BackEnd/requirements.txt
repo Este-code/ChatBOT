@@ -8,3 +8,4 @@ psycopg2-binary
 sqlite3
 scikit-learn
 sentence-transformers
+mysql-connector-python

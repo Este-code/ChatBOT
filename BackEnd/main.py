@@ -20,8 +20,8 @@ async def question_and_answer(query : RetrieveSQL):
 @app.post("/getMemories/", status_code=status.HTTP_200_OK)
 def getMemories():
     try:
-        history = bufferMemory.get_memories()
-        return {"history" : history}
+        history = bufferMemory.get_memories('admin')
+        return history
     except Exception as e:
         print("ERROR: "+str(e))
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e)) 

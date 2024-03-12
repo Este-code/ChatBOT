@@ -11,7 +11,7 @@ engine = create_engine(dati_connessione)
 
 path = "vectordb/"
 vectordb = CVDB.CustomVectorDB(path)
-bufferMemory = CBM.ConversationBufferMemory()
+bufferMemory = CBM.ConversationBufferMemory("localhost","root","admin")
 
 # Build prompt
 template = """
