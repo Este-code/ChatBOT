@@ -1,4 +1,5 @@
 import mysql.connector
+import json
 
 #Classe ConversationBufferMemory necessita dei seguenti parametri 
 # per essere inizializzata : host, user, password di mysql 
@@ -48,4 +49,14 @@ class ConversationBufferMemory:
         self.cursor.execute("SELECT * FROM 3AAI.ConversationBufferMemory WHERE user LIKE '"+user+"' AND topic LIKE '"+topic+"';")
         results = self.cursor.fetchall()
 
-        return results
+        # Convert the fetched data into a JSON format
+        memories_json = json.dumps([{
+            'id': row[0],
+            'timestamp': row[1].isoformat(),  # Convert timestamp to ISO format
+            'user': row[2],
+            'topic': row[3],
+            'request': row[4],
+            'response': row[5]
+        } for row in results])
+
+        return memories_json
