@@ -47,7 +47,7 @@
                                     <td>${data.answer[0]}</td>
                                     <td>${data.answer[1]}</td>
                                     <td>${data.answer[2]}</td>
-                                    <td>${data.answer[2]}</td>
+                                    <td>${data.answer[3]}</td>
                             </tr></tbody>`;
                 tableHTML += '</table>';
 
@@ -88,12 +88,12 @@
                 tableHTML += '<tr><th>ID</th><th>Timestamp</th><th>User</th><th>Topic</th><th>Request</th><th>Response</th></tr>';
                 data.forEach(memory => {
                     tableHTML += `<tr>
-                                        <td>${memory[0]}</td>
-                                        <td>${memory[1]}</td>
-                                        <td>${memory[2]}</td>
-                                        <td>${memory[3]}</td>
-                                        <td>${memory[4]}</td>
-                                        <td>${memory[5]}</td>
+                                        <td>${memory.id}</td>
+                                        <td>${memory.timestamp}</td>
+                                        <td>${memory.user}</td>
+                                        <td>${memory.topic}</td>
+                                        <td>${memory.request}</td>
+                                        <td>${memory.response}</td>
                                 </tr>`;
                 });
                 tableHTML += '</table>';
