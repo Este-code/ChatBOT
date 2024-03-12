@@ -63,13 +63,21 @@ class CustomVectorDB:
         self.conn.commit()
 
     # Funzione che restituisce tutte i record presenti in banca dati
-    # Informazioni restituite: ID, SQL, METADATA
+    # Informazioni restituite in un json: ID, SQL, METADATA
     # Restituisce un oggetto vuoto se non ci sono record
     def getAll_sql(self):
         self.cursor.execute('''SELECT id, sql, metadata FROM sql_queries''')
         results = self.cursor.fetchall()
+        if(len(results)>0):
+            sql_json = json.dumps([{
+                'id': row[0],
+                'sql': row[1],
+                'metadata': row[2]
+            } for row in results])
 
-        return results
+            return sql_json
+        else:
+            return []
 
     # Funzione che prende in input la query da ricercare in banca dati (ricerca su stringa esatta)
     # Informazioni restituite: ID, SQL, METADATA
