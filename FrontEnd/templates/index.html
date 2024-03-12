@@ -12,6 +12,7 @@
       <button class="btn btn-outline-primary" type="submit">Chiedi</button>
     </div>
   </form>
+  <br>
   <div id="apiResponse"></div>
   <script>
      document.getElementById('questionForm').addEventListener('submit', function(event) {
@@ -40,7 +41,17 @@
             .then(data => {
                 // Process the response data
                 console.log(data);
-                document.getElementById('apiResponse').innerHTML = data.answer;
+                // Generate HTML for the table
+                let tableHTML = '<table class="table table-striped">';
+                tableHTML += `<tbody><tr>
+                                    <td>${data.answer[0]}</td>
+                                    <td>${data.answer[1]}</td>
+                                    <td>${data.answer[2]}</td>
+                                    <td>${data.answer[2]}</td>
+                            </tr></tbody>`;
+                tableHTML += '</table>';
+
+                document.getElementById('apiResponse').innerHTML = tableHTML;
             })
             .catch(error => {
                 console.error('Error submitting question:', error);
@@ -72,7 +83,23 @@
            .then(data => {
                // Process the response data
                console.log(data);
-               document.getElementById('apiMemory').innerHTML = data.history;
+                       // Generate HTML for the table
+                let tableHTML = '<table class="table table-striped">';
+                tableHTML += '<tr><th>ID</th><th>Timestamp</th><th>User</th><th>Topic</th><th>Request</th><th>Response</th></tr>';
+                data.forEach(memory => {
+                    tableHTML += `<tr>
+                                        <td>${memory[0]}</td>
+                                        <td>${memory[1]}</td>
+                                        <td>${memory[2]}</td>
+                                        <td>${memory[3]}</td>
+                                        <td>${memory[4]}</td>
+                                        <td>${memory[5]}</td>
+                                </tr>`;
+                });
+                tableHTML += '</table>';
+                
+                // Insert the generated HTML into the div with id 'apiMemory'
+                document.getElementById('apiMemory').innerHTML = tableHTML;
            })
            .catch(error => {
                console.error('Error submitting question:', error);
