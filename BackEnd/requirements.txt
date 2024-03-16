@@ -9,3 +9,5 @@ sqlite3
 scikit-learn
 sentence-transformers
 mysql-connector-python
+pdfquery
+docx2python
